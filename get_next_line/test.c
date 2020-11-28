@@ -6,9 +6,12 @@
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/26 16:49:49 by xxu           #+#    #+#                 */
-/*   Updated: 2020/11/28 14:10:59 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2020/11/28 21:03:09 by xxu           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "Get_next_line.h"
+#include <unistd.h>
 
 typedef struct	    s_list
 {
@@ -32,17 +35,15 @@ int check_n(char *str)
 
 int check_rest_line(char *temp, char *str)
 {
-    int n;
     int len;
 
     if (store->rest_line) // when the rest line exist contains \n
     {        
-        n = check_n(store->rest_line);
-        if (n > -1) //check later, this is to cpy the before n to line, and rest to the struct rest
+        if (store->index_n > -1) //check later, this is to cpy the before n to line, and rest to the struct rest
         {
-            ft_strlcpy(temp, store->rest_line, n + 1); // +1 is for null terminater
+            ft_strlcpy(temp, store->rest_line, store->index_n + 1); // +1 is for null terminater
             len = ft_strlen(store->rest_line);
-            store->rest_line = ft_substr(store->rest_line, n + 1, len - n); // figure out the lenth???? + - 1
+            store->rest_line = ft_substr(store->rest_line, store->index_n + 1, len - store->index_n); // figure out the lenth???? + - 1
             return (1);
         }
         else
@@ -60,9 +61,11 @@ int	get_next_line(int fd, char **line)
     char *buf;
 
     temp = 0;
+    if (fd == -1)
+        return (-1);
     buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
     if (!buf)
-        return (0);
+        return (-1);
     i = check_rest_line(temp, store->rest_line);
     if (i == 1)
         return (1);
@@ -84,6 +87,7 @@ int	get_next_line(int fd, char **line)
             store->rest_line = ft_substr(buf, i, BUFFER_SIZE - i);
             return (1);
         }
-        ft_bzero(buf);
+        ft_bzero(buf, BUFFER_SIZE);
     }
+    store->index_n = check_n(store->rest_line);
 }
