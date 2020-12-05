@@ -6,7 +6,7 @@
 /*   By: Xiaojing <Xiaojing@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/12/04 17:03:48 by Xiaojing      #+#    #+#                 */
-/*   Updated: 2020/12/04 17:14:55 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2020/12/05 14:04:26 by xxu           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,3 +35,13 @@ int main()
 		i++;
 	}
 }
+
+// int main()
+// {
+// 	char *str = "\0";
+// 	if(!str)
+// 		printf("NULL");
+// 	else
+// 		printf("notNULL");
+// 	return (0);
+// }

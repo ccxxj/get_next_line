@@ -6,7 +6,7 @@
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/28 14:42:29 by xxu           #+#    #+#                 */
-/*   Updated: 2020/12/04 17:41:35 by Xiaojing      ########   odam.nl         */
+/*   Updated: 2020/12/05 17:07:22 by xxu           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int main()
 {
     int fd;
     int i;
-    i = 1;
+    i = 2;
     char *line;
     // char buf[6];
     int result = 0;
-    fd = open("normal.txt", O_RDONLY);
+    fd = open("fewchar_perline.txt", O_RDONLY);
     // fd = open("a.txt", O_RDONLY);
     // result = read(fd, buf, 7);
     // printf("result is %d\n", result);
@@ -36,13 +36,24 @@ int main()
     result = get_next_line(fd, &line);
     // printf("%d\n", result);
     // printf("%s\n", buf);
-    printf("%s\n", line);
-
-
+    printf("print line 1 %s\n",line);
+    // result = get_next_line(fd, &line);
+    // printf("result is %d\n", result);
+    // printf("print line 1 %s\n",line);
+    // result = get_next_line(fd, &line);
+    // printf("result is %d\n", result);
+    // printf("print line 1 %s\n",line);
+    // result = get_next_line(fd, &line);
+    // printf("result is %d\n", result);
+    // printf("print line 1 %s\n",line);
+    // result = get_next_line(fd, &line);
+    // printf("result is %d\n", result);
+    // printf("print line 1 %s\n",line);
     while (result > 0)
     {
         result = get_next_line(fd, &line);
         printf("print line %d is %s\n", i, line);
+        // printf("result is %d\n", result);
         i++;
         // printf("result is %d\n", result);
     }
