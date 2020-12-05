@@ -6,7 +6,7 @@
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/28 14:42:29 by xxu           #+#    #+#                 */
-/*   Updated: 2020/12/03 21:20:27 by xxu           ########   odam.nl         */
+/*   Updated: 2020/12/04 17:41:35 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,33 @@
 int main()
 {
     int fd;
+    int i;
+    i = 1;
     char *line;
+    // char buf[6];
     int result = 0;
-    fd = open("fewchar_perline.txt", O_RDONLY);
+    fd = open("normal.txt", O_RDONLY);
+    // fd = open("a.txt", O_RDONLY);
+    // result = read(fd, buf, 7);
+    // printf("result is %d\n", result);
+    // while (i < 4)
+    // {
+    //     if (buf[i] == '\0')
+    //         printf("found newline and i is %d\n", i);
+    //     i++;
+    // }
     result = get_next_line(fd, &line);
-    printf("%d\n", result);
+    // printf("%d\n", result);
+    // printf("%s\n", buf);
     printf("%s\n", line);
+
 
     while (result > 0)
     {
         result = get_next_line(fd, &line);
-        printf("%s\n", line);
+        printf("print line %d is %s\n", i, line);
+        i++;
+        // printf("result is %d\n", result);
     }
     // // char buf[6];
     // // fd = open(argv[1], O_RDONLY);  // to check the standard input first

@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: Xiaojing <Xiaojing@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/11/20 13:14:09 by Xiaojing      #+#    #+#                 */
-/*   Updated: 2020/12/03 21:35:36 by xxu           ########   odam.nl         */
+/*   Created: 2020/12/04 16:37:54 by Xiaojing      #+#    #+#                 */
+/*   Updated: 2020/12/04 17:36:26 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,6 @@
 
 static  t_store store;
 static	int store_initialized = 0;
-
-// (if (!store_initialized)
-// {
-// 	store->rest_line = NULL;
-// 	store->index_n = 0;
-// 	store_initialized = 1;
-// })
 
 int check_n(char *str)
 {
@@ -44,82 +37,84 @@ int check_rest_line(char **line, char *str, int n)
 {
     int len;
 
-    if (str) // when the rest line exist contains \n
+    if (str)
     {        
-        if (n > -1) //check later, this is to cpy the before n to line, and rest to the struct rest
+        if (n > -1)
         {
-            *line = ft_substr(str, 0, n + 1);// +1 is for null terminater
+            line[0] = ft_strjoin(line[0], ft_substr(str, 0, n));
             len = ft_strlen(str);
-            store.rest_line = ft_substr(str, n + 1, len - n); // figure out the lenth???? + - 1
+            store.rest_line = ft_substr(str, n + 1, len - n - 1);
+            store.index_n = check_n(store.rest_line);
             return (1);
         }
         else
-            line[store.j] = ft_strdup(str);
+            line[0] = ft_strjoin(line[0], ft_strdup(str));
     }
-    return (0); //if the return is 1, means it pass the \n, no need to read further; else continue read
+    return (0);
 }
 
 
 int	get_next_line(int fd, char **line)
 {
     int i;
+    int n;
     int result;
     char *buf;
 
-    if (fd == -1 || line == NULL || BUFFER_SIZE == 0)
+    if (fd == -1 || line == NULL || BUFFER_SIZE <= 0)
         return (-1);
 	if (!store_initialized)
 	{
 		store.rest_line = NULL;
 		store.index_n = 0;
-		store.j = 0;
+		store.flag = 0;
 		store_initialized = 1;
 	}
-    line[store.j] = "\0";
+    line[0] = "\0";
     buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
     if (!buf)
         return (-1);
     ft_bzero(buf, BUFFER_SIZE + 1);
-    i = check_rest_line(line, store.rest_line, store.index_n);
-    printf("check n i is %d\n", i);
+    i = check_rest_line(line, store.rest_line, store.index_n); 
+    if (store.flag == 1 && i == 1 && store.index_n == -1 && !store.rest_line)
+        return (0);
     if (i == 1)
         return (1);
-	// buf[BUFFER_SIZE] = '\0';
-	// printf("%d\n", result);
     while (1)
     {
         result = read(fd, buf, BUFFER_SIZE);
-		printf("result is %d\n", result);
-		printf("buf is %s\n", buf);
         if (result == -1)
             return (-1);
-        while (result == BUFFER_SIZE && buf[i] != '\n' && i < BUFFER_SIZE)
-			i++;
-        printf("i is %d\n", i);
-        if (result == 0)
+        n = check_n(buf);
+        if (result < BUFFER_SIZE)
         {
-            line[store.j] = ft_strjoin(line[store.j], buf);
+            char *buff = ft_substr(buf, 0, ft_strlen(buf));
+            store.rest_line = buff;
+            i = check_rest_line(line, store.rest_line, n);
+            store.flag = 1;
+            if (store.index_n == -1)
+            {
+                free(buf);
+                free(buff);
+                return(0);
+            }
             free(buf);
-            return (0);
+            free(buff);
+            return (1);
         }
-        else if (i < result)
+        if (n == -1)
         {
-            line[store.j] = ft_strjoin(line[store.j], ft_substr(buf, 0, i));
-            store.rest_line = ft_substr(buf, i + 1, BUFFER_SIZE - 1);
-            printf("line is %s\n", line[store.j]);
-            printf("rest line is %s\n", store.rest_line);
-            i = 0;
-            store.j++;
+            line[0] = ft_strjoin(line[0], buf);
+            ft_bzero(buf, BUFFER_SIZE + 1);
+        }
+        if (n > -1)
+        {
+            line[0] = ft_strjoin(line[0], ft_substr(buf, 0, n));
+            store.rest_line = ft_substr(buf, n + 1, BUFFER_SIZE - 1);
             store.index_n = check_n(store.rest_line);
-            printf("index n is %d\n", store.index_n);
+            i = 0;
             free(buf);
             return (1);
         }
-        line[store.j] = ft_strjoin(line[store.j], buf);
-        // printf("%s\n", line[store.j]);
-        ft_bzero(buf, BUFFER_SIZE + 1);
-        i = 0;
-    }
-    // store.j++;
-    // store.index_n = check_n(store.rest_line);
+    }   
 }

@@ -6,7 +6,7 @@
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/28 14:35:10 by xxu           #+#    #+#                 */
-/*   Updated: 2020/12/03 19:21:54 by xxu           ########   odam.nl         */
+/*   Updated: 2020/12/04 17:54:07 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct	    s_list
 	char	*rest_line;
 	int	    index_n;
 	int	    flag;
+	int	    i;
 }                   t_store;
 
 char	*ft_substr(char const *s, unsigned int start, size_t len);
