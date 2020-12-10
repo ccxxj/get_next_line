@@ -6,7 +6,7 @@
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/28 14:42:29 by xxu           #+#    #+#                 */
-/*   Updated: 2020/12/05 17:07:22 by xxu           ########   odam.nl         */
+/*   Updated: 2020/12/09 22:11:35 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main()
     char *line;
     // char buf[6];
     int result = 0;
-    fd = open("fewchar_perline.txt", O_RDONLY);
+    fd = open("normal.txt", O_RDONLY);
     // fd = open("a.txt", O_RDONLY);
     // result = read(fd, buf, 7);
     // printf("result is %d\n", result);
@@ -53,7 +53,7 @@ int main()
     {
         result = get_next_line(fd, &line);
         printf("print line %d is %s\n", i, line);
-        // printf("result is %d\n", result);
+        printf("result is %d\n", result);
         i++;
         // printf("result is %d\n", result);
     }
