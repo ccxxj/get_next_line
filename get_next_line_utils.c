@@ -6,7 +6,7 @@
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/11/28 14:18:42 by xxu           #+#    #+#                 */
-/*   Updated: 2020/12/05 15:56:45 by xxu           ########   odam.nl         */
+/*   Updated: 2020/12/10 21:37:10 by xxu           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char			*sub;
-	unsigned long	i;
-
-	if (!s)
-		return (NULL);
-	i = ft_strlen(s);
-	if (i < start)
-		len = 0;
-	if (start < i && start + len > i)
-		len = i - start;
-	sub = (char *)malloc((len + 1) * sizeof(char));
-	if (!sub)
-		return (NULL);
-    sub[len] = '\0';
-	i = 0;
-	while (i < len && s[i + start])
-	{
-		sub[i] = s[i + start];
-		i++;
-	}
-	return (sub);
-}
-
 void	ft_bzero(void *str, size_t n)
-{
-	int i;
+	{
+		int i;
 
 	i = 0;
 	while (n > 0)
@@ -109,4 +84,35 @@ char	*ft_strdup(const char *s1)
 	}
 	s2[i] = '\0';
 	return (s2);
+}
+
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		if (((unsigned char *)src)[i] == (unsigned char)c)
+			return (((unsigned char *)src) + i + 1);
+		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+		i++;
+	}
+	return (NULL);
+}
+
+void	*ft_strcat(char *s1, char *s2)
+{
+	int	len;
+	int	i;
+
+	len = ft_strlen(s1);
+	i = 0;
+	while (s2[i])
+	{
+		s1[len + i] = s2[i];
+		i++;
+	}
+	s1[len + i] = '\0';
+	return (s1);
 }

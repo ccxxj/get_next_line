@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   get_next_line.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: Xiaojing <Xiaojing@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/12/04 16:37:54 by Xiaojing      #+#    #+#                 */
-/*   Updated: 2020/12/10 21:52:18 by xxu           ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -30,18 +18,6 @@ int		check_n(char *str)
 	return (-1);
 }
 
-// void	check_initialization(t_store *store)
-// {
-// 	if (!store->initialization)
-// 	{
-// 		store->rest_line = NULL;
-// 		store->index_n = 0;
-// 		store->flag = 0;
-// 		store->initialization = 1;
-// 		store->result = 0;
-// 	}
-// }
-
 char	*ft_realloc(char *ptr, int size)
 {
 	char	*newptr;
@@ -60,8 +36,8 @@ char	*ft_realloc(char *ptr, int size)
 		i++;
 	}
 	newptr[i] = '\0';
-	free(ptr);
-	return (newptr); //see if this is working without involving prt[i]
+	// free(ptr);//figure out why this is causing error, once I try to free, it is telling me nothing to free
+	return (newptr);
 }
 
 int		check_rest_line(char **line, char *str, int n, t_store *store)
@@ -91,29 +67,8 @@ int		check_rest_line(char **line, char *str, int n, t_store *store)
 		line[0] = ft_realloc(line[0], ft_strlen(line[0]) + ft_strlen(str) + 1);
 		line[0] = ft_strcat(line[0], str);
 		if (!line[0])
-		{
-			// free(temp);
 			return (-1);
-		}
 	}
-	// if (str && n > -1)
-	// {
-	// 	store->rest_line = ft_memccpy(temp, str, 10, store->result);
-	// 	line[0] = ft_strjoin(line[0], temp);//replace to strcat, allocate space for line[0] and then reallocate
-	// 	if (!line[0])
-	// 		return (-1);
-	// 	store->index_n = check_n(store->rest_line);
-	// 	free(temp);
-	// 	return (1);
-	// }
-	// else if (str && n == -1)
-	// {
-	// 	line[0] = ft_strjoin(line[0], ft_strdup(str));//replace to strcat, allocate space for line[0] and then reallocate
-	// 	if (!line[0])
-	// 		return (-1);
-	// 	store->rest_line = NULL;
-	// }
-	// free(temp);//if string does not exist, temp is not allocated anyway
 	return (0);
 }
 
@@ -150,11 +105,6 @@ int		get_next_line(int fd, char **line)
 		store.initialization = 1;
 		store.result = 0;
 	}
-	// line[0] = "\0";
-	// line[0] = NULL;
-	// *line = (char *)malloc(1);
-	// *line = "\0";
-	line[0] = (char *)malloc(1);
 	line[0] = "\0";
 	store.i = check_rest_line(line, store.rest_line, store.index_n, &store);
 	if (store.i == -1)
