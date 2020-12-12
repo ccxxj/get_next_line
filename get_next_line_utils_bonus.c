@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line_utils.c                              :+:    :+:            */
+/*   get_next_line_utils_bonus.c                        :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/11/28 14:18:42 by xxu           #+#    #+#                 */
-/*   Updated: 2020/12/12 13:58:02 by xxu           ########   odam.nl         */
+/*   Created: 2020/12/12 11:46:54 by xxu           #+#    #+#                 */
+/*   Updated: 2020/12/12 11:47:08 by xxu           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_bzero(void *str, size_t n)
 	}
 }
 
-int		ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
 	int i;
 

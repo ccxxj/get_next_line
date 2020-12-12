@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   get_next_line.c                                    :+:    :+:            */
+/*   get_next_line_bonus.c                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: Xiaojing <Xiaojing@student.codam.nl>         +#+                     */
+/*   By: xxu <xxu@student.codam.nl>                   +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2020/12/04 16:37:54 by Xiaojing      #+#    #+#                 */
-/*   Updated: 2020/12/12 11:42:19 by xxu           ########   odam.nl         */
+/*   Created: 2020/12/12 11:42:07 by xxu           #+#    #+#                 */
+/*   Updated: 2020/12/12 13:46:05 by xxu           ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -108,26 +108,26 @@ int		ft_read(int fd, char *buf, char **line, t_store *store)
 
 int		get_next_line(int fd, char **line)
 {
-	static	t_store	store;
+	static	t_store	store[1024];
 
 	if (fd < 0 || line == NULL || BUFFER_SIZE < 1)
 		return (-1);
-	if (!store.initialization)
+	if (!store[fd].initialization)
 	{
-		store.rest_line = NULL;
-		store.index_n = -1;
-		store.flag = 0;
-		store.initialization = 1;
-		store.result = 0;
+		store[fd].rest_line = NULL;
+		store[fd].index_n = -1;
+		store[fd].flag = 0;
+		store[fd].initialization = 1;
+		store[fd].result = 0;
 	}
 	*line = (char *)malloc(10);
 	(*line)[0] = '\0';
-	store.i = check_rest_line(line, store.rest_line, store.index_n, &store);
-	if (store.i == -1)
+	store[fd].i = check_rest_line(line, store[fd].rest_line, store[fd].index_n, &store[fd]);
+	if (store[fd].i == -1)
 		return (-1);
-	if (store.flag == 1 && store.i == 0)
+	if (store[fd].flag == 1 && store[fd].i == 0)
 		return (0);
-	if (store.i == 1)
+	if (store[fd].i == 1)
 		return (1);
-	return (ft_read(fd, store.buf, line, &store));
+	return (ft_read(fd, store[fd].buf, line, &store[fd]));
 }
