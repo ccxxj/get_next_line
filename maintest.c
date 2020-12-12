@@ -6,14 +6,14 @@
 /*   By: Xiaojing <Xiaojing@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/12/04 17:03:48 by Xiaojing      #+#    #+#                 */
-/*   Updated: 2020/12/10 20:03:15 by xxu           ########   odam.nl         */
+/*   Updated: 2020/12/11 13:44:58 by Xiaojing      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdio.h>
 #include <fcntl.h>
-#include "get_next_line.h"
+// #include "get_next_line.h"
 
 int main()
 {
@@ -43,9 +43,9 @@ int main()
 
 
 
-	char buf[6] = "bbbbb";	
+	char buf[8] = "bbbbbbb";	
 	fd = open("a.txt", O_RDONLY);
-	int result = read(fd, buf, 8);
+	int result = read(fd, buf, 6);
 	printf("buf is %s\n", buf);
 	printf("result is %d\n", result);
 

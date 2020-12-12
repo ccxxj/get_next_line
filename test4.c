@@ -1,28 +1,54 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   get_next_line.c                                    :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: Xiaojing <Xiaojing@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2020/12/04 16:37:54 by Xiaojing      #+#    #+#                 */
-/*   Updated: 2020/12/11 16:48:50 by Xiaojing      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <stdio.h>
 
-int		check_newline(int n, char *str, char **line, t_store *store)
+int		check_n(char *str)
 {
-	int	i;
-	int	len;
+	int i;
 
 	i = 0;
-	len = ft_strlen(*line);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+char	*ft_realloc(char *ptr, int size)
+{
+	char	*newptr;
+	int		i;
+
+	i = 0;
+	if (!ptr)
+	{
+		ptr = (char *)malloc((size) * sizeof(char));
+		return (ptr);
+	}
+	if (ft_strlen(ptr) >= size)
+		return (ptr);
+	newptr = (char *)malloc((size) * sizeof(char));
+	while (ptr[i])
+	{
+		newptr[i] = ptr[i];
+		i++;
+	}
+	newptr[i] = '\0';
+	free(ptr);// this is problemetic,
+	return (newptr);
+}
+
+int		split(char **line, int len, char *str, int n, t_store *store)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (1);
 	if (n == -1)
 	{
 		while (str[i])
@@ -30,25 +56,9 @@ int		check_newline(int n, char *str, char **line, t_store *store)
 			(*line)[len + i] = str[i];
 			i++;
 		}
-		free(store->rest_line);
 		store->rest_line = NULL;
 		return (1);
 	}
-	else
-		return (0);
-}
-
-int		split(char **line, char *str, int n, t_store *store)
-{
-	int	i;
-	int	len;
-
-	len = ft_strlen(*line);
-	if (!str)
-		return (1);
-	i = check_newline(n, str, line, store);
-	if (i == 1)
-		return (1);
 	store->rest_line = ft_realloc(store->rest_line, ft_strlen(str) - n);
 	if (!store->rest_line)
 		return (-1);
@@ -60,7 +70,7 @@ int		split(char **line, char *str, int n, t_store *store)
 			store->rest_line[i - n - 1] = str[i];
 		i++;
 	}
-	store->rest_line[i - n - 1] = '\0';
+	store->rest_line[i - n -1] = '\0';
 	return (1);
 }
 
@@ -71,14 +81,21 @@ int		check_rest_line(char **line, char *str, int n, t_store *store)
 	int	result;
 
 	len = ft_strlen(*line);
+	// printf("check\n");
 	m = n == -1 ? ft_strlen(str) : n;
+	// printf("check\n");
 	*line = ft_realloc(*line, len + m + 1);
+	// printf("len + m is %d\n", len + m);
 	if (!*line)
 		return (-1);
-	result = split(line, str, n, store);
+	// printf("check\n");
+	result = split(line, len, str, n, store);
+	// printf("check aaaaa\n");
 	if (result == -1)
 		return (-1);
+	// printf("len + m is second time%d\n", len + m);
 	(*line)[len + m] = '\0';
+	// printf("ollaaaaa\n");
 	if (n > -1)
 	{
 		store->index_n = check_n(store->rest_line);
@@ -93,15 +110,18 @@ int		ft_read(int fd, char *buf, char **line, t_store *store)
 	while (1)
 	{
 		store->result = read(fd, buf, BUFFER_SIZE);
-		if (store->result == -1)
+		if (store->result == -1)//good
 			return (-1);
 		buf[store->result] = '\0';
 		store->flag = store->result < BUFFER_SIZE ? 1 : 0;
 		store->i = check_rest_line(line, buf, check_n(buf), store);
+		// printf("store i is %d\n", store->i);
 		if (check_n(buf) > -1)
 			return (1);
+		// printf("result1\n");
 		if ((store->flag == 1 && check_n(buf) < 0) || store->result == 0)
 			return (0);
+		// printf("result2\n");
 		if (check_n(buf) == -1)
 			ft_bzero(buf, BUFFER_SIZE + 1);
 	}
